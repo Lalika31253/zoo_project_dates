@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from .views import SignUpView   # add to existing imports
 
 app_name = 'animals'   # Enables URL namespacing (e.g., {% url 'animals:animal-list' %})
 
@@ -49,4 +50,6 @@ urlpatterns = [
     # --- DateDetailView: A single animal identified by date + pk ---
     path('animals/archive/<int:year>/<int:month>/<int:day>/<int:pk>/',
          views.AnimalDateDetailView.as_view(), name='animal-date-detail'),
+
+    path('accounts/signup/', SignUpView.as_view(), name='signup'),     
 ]
