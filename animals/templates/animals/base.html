@@ -2,40 +2,158 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Zoo App{% endblock %}</title>
-</head>
-<body>
-
-    <nav>
-        <strong>Zoo Management</strong> |
-        <a href="{% url 'animals:home' %}">Home</a> |
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { background-color: #fbf8ff; font-family: 'Inter', sans-serif; }
     
+        /* Form field styling */
+        form p { display: flex; flex-direction: column; gap: 4px; margin-bottom: 16px; }
+        form p label { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #6b7280; }
+        form p input,
+        form p select,
+        form p textarea {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1.5px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #111827;
+            background-color: #f9fafb;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        form p input:focus,
+        form p select:focus,
+        form p textarea:focus {
+            border-color: #065f46;
+            box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
+            background-color: #ffffff;
+        }
+        form ul { list-style: none; padding: 0; margin: 4px 0 0; }
+        form ul li { font-size: 12px; color: #dc2626; }
+    </style>
+</head>
+<body class="text-gray-900">
+
+<!-- Sidebar -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-100 shadow-sm z-50 flex flex-col py-6">
+
+    <!-- Logo -->
+    <div class="px-6 mb-8">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-emerald-800 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white">pets</span>
+            </div>
+            <div>
+                <h1 class="text-xl font-black text-emerald-800 leading-none">WildCare</h1>
+                <p class="text-[10px] uppercase tracking-widest text-gray-400">Zoo Management</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="flex-1 space-y-1 px-2">
+        <a href="{% url 'animals:home' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">dashboard</span>
+            <span class="text-sm font-semibold">Dashboard</span>
+        </a>
+
         {% if user.is_authenticated %}
-            <a href="{% url 'animals:animal-list' %}">All Animals</a> |
-            <a href="{% url 'animals:animal-create' %}">Add Animal</a> |
-            <a href="{% url 'animals:animal-search' %}">Search</a> |
-            <a href="{% url 'animals:animal-archive-index' %}">Archive</a> |
-            <a href="{% url 'animals:animal-today-archive' %}">Added Today</a> |
-            <a href="{% url 'password_change' %}">Change Password</a> |
-            Logged in as <strong>{{ user.username }}</strong> |
-            <form method="post" action="{% url 'logout' %}" style="display:inline">
-                {% csrf_token %}
-                <button type="submit">Logout</button>
-            </form>
-        {% else %}
-            <a href="{% url 'login' %}">Login</a> |
-            <a href="{% url 'animals:signup' %}">Sign Up</a>
+        <a href="{% url 'animals:animal-list' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">pets</span>
+            <span class="text-sm font-semibold">Animal Records</span>
+        </a>
+        <a href="{% url 'animals:animal-create' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">add_circle</span>
+            <span class="text-sm font-semibold">Add Animal</span>
+        </a>
+        <a href="{% url 'animals:animal-search' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">search</span>
+            <span class="text-sm font-semibold">Search</span>
+        </a>
+        <a href="{% url 'animals:animal-archive-index' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">inventory_2</span>
+            <span class="text-sm font-semibold">Archive</span>
+        </a>
+        <a href="{% url 'animals:animal-today-archive' %}"
+           class="flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 hover:bg-emerald-50 hover:text-emerald-700 transition-all">
+            <span class="material-symbols-outlined">today</span>
+            <span class="text-sm font-semibold">Added Today</span>
+        </a>
         {% endif %}
     </nav>
 
-<hr>
+    <!-- Bottom Section -->
+    <div class="px-4 mt-auto space-y-2">
+        {% if user.is_authenticated %}
+            <a href="{% url 'password_change' %}"
+               class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm transition-all">
+                <span class="material-symbols-outlined text-xl">lock</span>
+                Change Password
+            </a>
+            <div class="flex items-center gap-3 px-4 py-2 text-sm text-gray-500 border-t border-gray-100 mt-2 pt-4">
+                <span class="material-symbols-outlined text-xl">account_circle</span>
+                <span class="font-semibold text-gray-700">{{ user.username }}</span>
+            </div>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit"
+                        class="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 text-sm font-semibold transition-all">
+                    <span class="material-symbols-outlined text-xl">logout</span>
+                    Logout
+                </button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}"
+               class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm transition-all">
+                <span class="material-symbols-outlined text-xl">login</span>
+                Login
+            </a>
+            <a href="{% url 'animals:signup' %}"
+               class="flex items-center gap-3 px-4 py-2 rounded-lg text-gray-500 hover:bg-gray-50 text-sm transition-all">
+                <span class="material-symbols-outlined text-xl">person_add</span>
+                Sign Up
+            </a>
+        {% endif %}
+    </div>
 
-<h1>{% block heading %}{% endblock %}</h1>
+</aside>
 
-{% block content %}{% endblock %}
+<!-- Main Content -->
+<main class="ml-64 min-h-screen flex flex-col">
 
-<hr>
-<footer>Zoo Animal Management System</footer>
+    <!-- Top Bar -->
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-40 h-16 flex items-center px-8 justify-between">
+        <h2 class="text-lg font-bold text-emerald-800">{% block heading %}{% endblock %}</h2>
+        <div class="flex items-center gap-2">
+            {% if user.is_authenticated %}
+                <span class="text-sm text-gray-500">Logged in as</span>
+                <span class="text-sm font-bold text-emerald-700">{{ user.username }}</span>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Page Content -->
+    <div class="p-8 flex-1">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-100 px-8 py-4 text-xs text-gray-400 text-center">
+        Zoo Animal Management System
+    </footer>
+
+</main>
 
 </body>
 </html>

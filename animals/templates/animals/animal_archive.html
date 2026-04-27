@@ -4,23 +4,53 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# 'date_list' is provided by ArchiveIndexView — a list of years with animals #}
-{# 'total_years' is an extra variable from get_context_data() #}
 
-<p>The archive spans <strong>{{ total_years }}</strong> year(s).</p>
+<div class="max-w-2xl mx-auto">
 
-{% if date_list %}
-<ul>
-    {% for year in date_list %}
-    <li>
-        <a href="{% url 'animals:animal-year-archive' year.year %}">
-            {{ year.year }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No animals have been added yet.</p>
-{% endif %}
+    <!-- Header Card -->
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-700">inventory_2</span>
+            </div>
+            <div>
+                <h3 class="text-lg font-bold text-emerald-800">Archive Overview</h3>
+                <p class="text-sm text-gray-500">Browse animals by year they were added</p>
+            </div>
+        </div>
+        <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-full">
+            {{ total_years }} year(s)
+        </span>
+    </div>
+
+    <!-- Year List -->
+    {% if date_list %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+        <div class="divide-y divide-gray-100">
+            {% for year in date_list %}
+            <a href="{% url 'animals:animal-year-archive' year.year %}"
+               class="flex items-center justify-between px-6 py-4 hover:bg-emerald-50 transition-colors group">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-emerald-600">calendar_month</span>
+                    <span class="font-bold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                        {{ year.year }}
+                    </span>
+                </div>
+                <span class="material-symbols-outlined text-gray-300 group-hover:text-emerald-600 transition-colors">
+                    chevron_right
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm px-6 py-12 text-center">
+        <span class="material-symbols-outlined text-4xl text-gray-300">inventory_2</span>
+        <p class="text-gray-400 mt-2 font-medium">No animals have been added yet.</p>
+    </div>
+    {% endif %}
+
+</div>
 
 {% endblock %}

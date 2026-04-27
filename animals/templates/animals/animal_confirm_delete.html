@@ -4,14 +4,50 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# 'animal' or 'object' is the Animal instance provided by DeleteView #}
 
-<p>Are you sure you want to permanently delete <strong>{{ object.name }}</strong>?</p>
-<p>This action cannot be undone.</p>
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-xl border border-red-100 shadow-sm overflow-hidden">
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, Delete</button>
-    <a href="{{ object.get_absolute_url }}">Cancel</a>
-</form>
+        <!-- Warning Header -->
+        <div class="bg-red-600 px-6 py-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white">warning</span>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white">Confirm Deletion</h2>
+                <p class="text-red-200 text-sm">This action cannot be undone</p>
+            </div>
+        </div>
+
+        <!-- Message -->
+        <div class="px-6 py-6 text-center">
+            <p class="text-gray-700 text-base">
+                Are you sure you want to permanently delete
+                <strong class="text-red-600">{{ object.name }}</strong>?
+            </p>
+            <p class="text-gray-400 text-sm mt-2">
+                All data associated with this animal will be lost forever.
+            </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="px-6 pb-6 flex gap-3">
+            <form method="post" class="flex-1">
+                {% csrf_token %}
+                <button type="submit"
+                        class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-red-600 text-white font-bold rounded-lg hover:bg-red-700 transition-all">
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                    Yes, Delete
+                </button>
+            </form>
+            <a href="{{ object.get_absolute_url }}"
+               class="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-lg hover:bg-gray-200 transition-all">
+                <span class="material-symbols-outlined text-sm">arrow_back</span>
+                Cancel
+            </a>
+        </div>
+
+    </div>
+</div>
+
 {% endblock %}

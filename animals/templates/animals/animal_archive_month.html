@@ -4,24 +4,62 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# 'month' = the month as a datetime; 'object_list' = animals that month #}
 
-{% if object_list %}
-<ul>
-    {% for animal in object_list %}
-    <li>
-        <a href="{{ animal.get_absolute_url }}">{{ animal }}</a>
-        — added {{ animal.date_added }}
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No animals were added during this month.</p>
-{% endif %}
+<div class="max-w-2xl mx-auto">
 
-<p>
-    <a href="{% url 'animals:animal-year-archive' month.year %}">
+    {% if object_list %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-emerald-800 flex items-center gap-2">
+                <span class="material-symbols-outlined">calendar_month</span>
+                Animals This Month
+            </h3>
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-full">
+                {{ object_list|length }} animal(s)
+            </span>
+        </div>
+
+        <!-- Animal List -->
+        <div class="divide-y divide-gray-100">
+            {% for animal in object_list %}
+            <a href="{{ animal.get_absolute_url }}"
+               class="flex items-center justify-between px-6 py-4 hover:bg-emerald-50 transition-colors group">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-emerald-600 text-sm">pets</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                            {{ animal }}
+                        </p>
+                        <p class="text-xs text-gray-400">Added {{ animal.date_added }}</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-gray-300 group-hover:text-emerald-600 transition-colors">
+                    chevron_right
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {% else %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm px-6 py-12 text-center mb-6">
+        <span class="material-symbols-outlined text-4xl text-gray-300">calendar_month</span>
+        <p class="text-gray-400 mt-2 font-medium">No animals were added during this month.</p>
+    </div>
+    {% endif %}
+
+    <!-- Back Link -->
+    <a href="{% url 'animals:animal-year-archive' month.year %}"
+       class="flex items-center gap-2 text-emerald-700 font-bold hover:underline">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
         Back to {{ month.year }} archive
     </a>
-</p>
+
+</div>
+
 {% endblock %}

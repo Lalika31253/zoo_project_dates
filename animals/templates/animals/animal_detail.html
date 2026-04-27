@@ -4,22 +4,75 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# 'animal' = context_object_name from DetailView #}
-{# 'is_elderly' and 'weight_category' are extra variables from get_context_data() #}
 
-<table border="1">
-    <tr><th>Name</th><td>{{ animal.name }}</td></tr>
-    <tr><th>Age</th><td>{{ animal.age }} year(s)
-        {% if is_elderly %}<em>(Elderly animal)</em>{% endif %}
-    </td></tr>
-    <tr><th>Weight</th><td>{{ animal.weight }} kg ({{ weight_category }})</td></tr>
-    <tr><th>Born in Captivity</th><td>{{ animal.born_in_captivity|yesno:"Yes,No" }}</td></tr>
-    <tr><th>Date Added</th><td>{{ animal.date_added }}</td></tr>
-</table>
+<div class="max-w-2xl mx-auto">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 
-<p>
-    <a href="{% url 'animals:animal-update' animal.pk %}">Edit this animal</a> |
-    <a href="{% url 'animals:animal-delete' animal.pk %}">Delete this animal</a> |
-    <a href="{% url 'animals:animal-list' %}">Back to list</a>
-</p>
+        <!-- Card Header -->
+        <div class="bg-emerald-800 px-6 py-5 flex items-center gap-4">
+            <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white">pets</span>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white">{{ animal.name }}</h2>
+                <p class="text-emerald-200 text-sm">Animal Record</p>
+            </div>
+            {% if is_elderly %}
+                <span class="ml-auto px-3 py-1 bg-amber-500 text-white text-xs font-bold rounded-full uppercase">
+                    Elderly
+                </span>
+            {% endif %}
+        </div>
+
+        <!-- Detail Rows -->
+        <div class="divide-y divide-gray-100">
+            <div class="flex justify-between items-center px-6 py-4">
+                <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Age</span>
+                <span class="font-bold text-gray-900">{{ animal.age }} year(s)</span>
+            </div>
+            <div class="flex justify-between items-center px-6 py-4">
+                <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Weight</span>
+                <span class="font-bold text-gray-900">
+                    {{ animal.weight }} kg
+                    <span class="ml-2 px-2 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">
+                        {{ weight_category }}
+                    </span>
+                </span>
+            </div>
+            <div class="flex justify-between items-center px-6 py-4">
+                <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Born in Captivity</span>
+                {% if animal.born_in_captivity %}
+                    <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">Yes</span>
+                {% else %}
+                    <span class="px-3 py-1 bg-gray-100 text-gray-600 text-xs font-bold rounded-full">No</span>
+                {% endif %}
+            </div>
+            <div class="flex justify-between items-center px-6 py-4">
+                <span class="text-sm font-semibold text-gray-500 uppercase tracking-wide">Date Added</span>
+                <span class="font-bold text-gray-900">{{ animal.date_added }}</span>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex gap-3 mt-6">
+        <a href="{% url 'animals:animal-update' animal.pk %}"
+           class="flex items-center gap-2 px-4 py-2 bg-emerald-800 text-white font-bold rounded-lg hover:bg-emerald-700 transition-all">
+            <span class="material-symbols-outlined text-sm">edit</span>
+            Edit
+        </a>
+        <a href="{% url 'animals:animal-delete' animal.pk %}"
+           class="flex items-center gap-2 px-4 py-2 bg-red-50 text-red-600 font-bold rounded-lg hover:bg-red-100 transition-all">
+            <span class="material-symbols-outlined text-sm">delete</span>
+            Delete
+        </a>
+        <a href="{% url 'animals:animal-list' %}"
+           class="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-600 font-bold rounded-lg hover:bg-gray-200 transition-all ml-auto">
+            <span class="material-symbols-outlined text-sm">arrow_back</span>
+            Back to List
+        </a>
+    </div>
+</div>
+
 {% endblock %}

@@ -5,44 +5,83 @@
 
 {% block content %}
 
-<form method="get">
-    {# No {% csrf_token %} needed — GET requests don't modify data #}
-    {{ form.as_p }}
-    <button type="submit">Search</button>
-</form>
+<!-- Search Form -->
+<div class="max-w-2xl mx-auto mb-8">
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+        <h3 class="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">search</span>
+            Search Animals
+        </h3>
+        <form method="get" class="space-y-4">
+            {{ form.as_p }}
+            <button type="submit"
+                    class="w-full px-4 py-2 bg-emerald-800 text-white font-bold rounded-lg hover:bg-emerald-700 transition-all flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-sm">search</span>
+                Search
+            </button>
+        </form>
+    </div>
+</div>
 
 {% if search_performed %}
-<hr>
-<h2>Results ({{ result_count }} found)</h2>
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 
-{% if results %}
-<table border="1">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Weight (kg)</th>
-            <th>Born in Captivity</th>
-            <th>Date Added</th>
-            <th>Details</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for animal in results %}
-        <tr>
-            <td>{{ animal.name }}</td>
-            <td>{{ animal.age }}</td>
-            <td>{{ animal.weight }}</td>
-            <td>{{ animal.born_in_captivity|yesno:"Yes,No" }}</td>
-            <td>{{ animal.date_added }}</td>
-            <td><a href="{{ animal.get_absolute_url }}">View</a></td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
-{% else %}
-<p>No animals matched your search criteria.</p>
-{% endif %}
+    <!-- Results Header -->
+    <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+        <h3 class="text-lg font-bold text-emerald-800">Results</h3>
+        <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-full">
+            {{ result_count }} found
+        </span>
+    </div>
+
+    {% if results %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 border-b border-gray-100">
+                <tr>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Name</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Age</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Weight (kg)</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Captivity</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Date Added</th>
+                    <th class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wide">Details</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+                {% for animal in results %}
+                <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-6 py-4 font-semibold text-gray-900">{{ animal.name }}</td>
+                    <td class="px-6 py-4 text-gray-600">{{ animal.age }} yr</td>
+                    <td class="px-6 py-4 text-gray-600">{{ animal.weight }}</td>
+                    <td class="px-6 py-4">
+                        {% if animal.born_in_captivity %}
+                            <span class="px-2 py-1 bg-emerald-50 text-emerald-700 text-xs font-bold rounded-full">Yes</span>
+                        {% else %}
+                            <span class="px-2 py-1 bg-gray-100 text-gray-500 text-xs font-bold rounded-full">No</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 text-gray-600">{{ animal.date_added }}</td>
+                    <td class="px-6 py-4">
+                        <a href="{{ animal.get_absolute_url }}"
+                           class="flex items-center gap-1 text-emerald-700 font-bold hover:underline">
+                            <span class="material-symbols-outlined text-sm">open_in_new</span>
+                            View
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+    <div class="px-6 py-12 text-center">
+        <span class="material-symbols-outlined text-4xl text-gray-300">search_off</span>
+        <p class="text-gray-400 mt-2 font-medium">No animals matched your search criteria.</p>
+    </div>
+    {% endif %}
+
+</div>
 {% endif %}
 
 {% endblock %}

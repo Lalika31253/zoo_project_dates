@@ -36,7 +36,7 @@ class SignUpView(CreateView):
     def form_valid(self, form):
         # Save the new user, then log them in straight away
         response = super().form_valid(form)
-        login(self.request, self.obj)
+        login(self.request, self.object)
         return response
 
     def get_context_data(self, **kwargs):
@@ -99,7 +99,7 @@ class AnimalListView(LoginRequiredMixin, ListView):
     model = Animal
     template_name = 'animals/animal_list.html'
     context_object_name = 'animals'   # Renames 'object_list' to 'animals' in template
-    paginate_by = 5
+    paginate_by = 10
 
     def get_queryset(self):
         # Default ordering is defined in Meta; you can override it here.

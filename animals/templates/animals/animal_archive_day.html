@@ -4,15 +4,59 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# 'day' = the date; 'object_list' = animals added on that day #}
 
-{% if object_list %}
-<ul>
-    {% for animal in object_list %}
-    <li><a href="{{ animal.get_absolute_url }}">{{ animal }}</a></li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No animals were added on this day.</p>
-{% endif %}
+<div class="max-w-2xl mx-auto">
+
+    {% if object_list %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden mb-6">
+
+        <!-- Header -->
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-emerald-800 flex items-center gap-2">
+                <span class="material-symbols-outlined">today</span>
+                Animals Added This Day
+            </h3>
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-full">
+                {{ object_list|length }} animal(s)
+            </span>
+        </div>
+
+        <!-- List -->
+        <div class="divide-y divide-gray-100">
+            {% for animal in object_list %}
+            <a href="{{ animal.get_absolute_url }}"
+               class="flex items-center justify-between px-6 py-4 hover:bg-emerald-50 transition-colors group">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-emerald-600 text-sm">pets</span>
+                    </div>
+                    <p class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                        {{ animal }}
+                    </p>
+                </div>
+                <span class="material-symbols-outlined text-gray-300 group-hover:text-emerald-600 transition-colors">
+                    chevron_right
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+
+    </div>
+
+    {% else %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm px-6 py-12 text-center">
+        <span class="material-symbols-outlined text-4xl text-gray-300">today</span>
+        <p class="text-gray-400 mt-2 font-medium">No animals were added on this day.</p>
+    </div>
+    {% endif %}
+
+    <!-- Back Link -->
+    <a href="{% url 'animals:animal-archive-index' %}"
+       class="flex items-center gap-2 text-emerald-700 font-bold hover:underline">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        Back to Archive
+    </a>
+
+</div>
+
 {% endblock %}

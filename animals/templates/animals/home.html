@@ -4,19 +4,105 @@
 {% block heading %}{{ page_title }}{% endblock %}
 
 {% block content %}
-{# page_title, total_animals, captive_count, wild_count come from HomeView.get_context_data() #}
-<p>Welcome to the Zoo Animal Management System.</p>
 
-<p>
-    The zoo currently has <strong>{{ total_animals }}</strong> animal(s) on record.
-    Of these, <strong>{{ captive_count }}</strong> were born in captivity and
-    <strong>{{ wild_count }}</strong> were born in the wild.
-</p>
+<!-- Welcome Header -->
+<div class="flex justify-between items-end mb-8">
+    <div>
+        <h2 class="text-3xl font-bold text-primary">System Overview</h2>
+        <p class="text-on-surface-variant mt-1">Welcome back. Here's what's happening at the zoo today.</p>
+    </div>
+    <a href="{% url 'animals:animal-create' %}"
+       class="px-4 py-2 bg-primary text-white font-bold rounded-lg flex items-center gap-2 shadow-md hover:shadow-lg transition-all">
+        + New Animal
+    </a>
+</div>
 
-<ul>
-    <li><a href="{% url 'animals:animal-list' %}">Browse all animals</a></li>
-    <li><a href="{% url 'animals:animal-create' %}">Add a new animal</a></li>
-    <li><a href="{% url 'animals:animal-search' %}">Search animals</a></li>
-    <li><a href="{% url 'animals:animal-archive-index' %}">View archive by date</a></li>
-</ul>
+<!-- Stats Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+    <!-- Total Animals -->
+    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Total Animals</p>
+        <h3 class="text-3xl font-bold text-primary">{{ total_animals }}</h3>
+        <div class="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+            <div class="h-full bg-emerald-500 w-full"></div>
+        </div>
+    </div>
+
+    <!-- Born in Captivity -->
+    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Born in Captivity</p>
+        <h3 class="text-3xl font-bold text-primary">{{ captive_count }}</h3>
+        <div class="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+            {% if total_animals %}
+                <div class="h-full bg-emerald-500" style="width: {% widthratio captive_count total_animals 100 %}%"></div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Born in the Wild -->
+    <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-all">
+        <p class="text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1">Born in the Wild</p>
+        <h3 class="text-3xl font-bold text-primary">{{ wild_count }}</h3>
+        <div class="mt-4 h-1 bg-gray-100 rounded-full overflow-hidden">
+            {% if total_animals %}
+                <div class="h-full bg-emerald-400" style="width: {% widthratio wild_count total_animals 100 %}%"></div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+    <h3 class="text-lg font-bold text-primary mb-4">Quick Actions</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <a href="{% url 'animals:animal-list' %}"
+           class="flex items-center gap-3 p-4 rounded-lg bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all group">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-200">
+                🐾
+            </div>
+            <div>
+                <p class="font-bold text-sm">Browse Animals</p>
+                <p class="text-xs text-gray-400">View all records</p>
+            </div>
+        </a>
+
+        <a href="{% url 'animals:animal-create' %}"
+           class="flex items-center gap-3 p-4 rounded-lg bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all group">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-200">
+                ➕
+            </div>
+            <div>
+                <p class="font-bold text-sm">Add Animal</p>
+                <p class="text-xs text-gray-400">Create new entry</p>
+            </div>
+        </a>
+
+        <a href="{% url 'animals:animal-search' %}"
+           class="flex items-center gap-3 p-4 rounded-lg bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all group">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-200">
+                🔍
+            </div>
+            <div>
+                <p class="font-bold text-sm">Search</p>
+                <p class="text-xs text-gray-400">Filter records</p>
+            </div>
+        </a>
+
+        <a href="{% url 'animals:animal-archive-index' %}"
+           class="flex items-center gap-3 p-4 rounded-lg bg-gray-50 hover:bg-emerald-50 hover:text-emerald-700 transition-all group">
+            <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-700 group-hover:bg-emerald-200">
+                📅
+            </div>
+            <div>
+                <p class="font-bold text-sm">Archive</p>
+                <p class="text-xs text-gray-400">Browse by date</p>
+            </div>
+        </a>
+
+    </div>
+</div>
+
 {% endblock %}

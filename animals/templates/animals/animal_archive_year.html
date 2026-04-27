@@ -4,32 +4,79 @@
 {% block heading %}{{ page_title }} — {{ animal_count }} animal(s){% endblock %}
 
 {% block content %}
-{# 'year' = the year as a datetime object; 'object_list' = animals that year #}
-{# 'date_list' = list of months with animals #}
-{# 'animal_count' and 'page_title' are extra variables #}
 
-<h2>Browse by month</h2>
-{% if date_list %}
-<ul>
-    {% for month in date_list %}
-    <li>
-        <a href="{% url 'animals:animal-month-archive' year.year month.month %}">
-            {{ month|date:"F" }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
-{% endif %}
+<div class="max-w-3xl mx-auto space-y-6">
 
-<h2>All Animals Added in {{ year.year }}</h2>
-{% if object_list %}
-<ul>
-    {% for animal in object_list %}
-    <li><a href="{{ animal.get_absolute_url }}">{{ animal }}</a> — {{ animal.date_added }}</li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No animals were added this year.</p>
-{% endif %}
+    <!-- Browse by Month -->
+    {% if date_list %}
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
+        <h3 class="text-lg font-bold text-emerald-800 mb-4 flex items-center gap-2">
+            <span class="material-symbols-outlined">calendar_month</span>
+            Browse by Month
+        </h3>
+        <div class="flex flex-wrap gap-3">
+            {% for month in date_list %}
+            <a href="{% url 'animals:animal-month-archive' year.year month.month %}"
+               class="px-4 py-2 bg-emerald-50 text-emerald-700 font-bold rounded-lg hover:bg-emerald-100 transition-colors">
+                {{ month|date:"F" }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- All Animals This Year -->
+    <div class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+
+        <div class="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
+            <h3 class="text-lg font-bold text-emerald-800 flex items-center gap-2">
+                <span class="material-symbols-outlined">pets</span>
+                All Animals Added in {{ year.year }}
+            </h3>
+            <span class="px-3 py-1 bg-emerald-50 text-emerald-700 text-sm font-bold rounded-full">
+                {{ animal_count }} animal(s)
+            </span>
+        </div>
+
+        {% if object_list %}
+        <div class="divide-y divide-gray-100">
+            {% for animal in object_list %}
+            <a href="{{ animal.get_absolute_url }}"
+               class="flex items-center justify-between px-6 py-4 hover:bg-emerald-50 transition-colors group">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full bg-emerald-50 flex items-center justify-center">
+                        <span class="material-symbols-outlined text-emerald-600 text-sm">pets</span>
+                    </div>
+                    <div>
+                        <p class="font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors">
+                            {{ animal }}
+                        </p>
+                        <p class="text-xs text-gray-400">Added {{ animal.date_added }}</p>
+                    </div>
+                </div>
+                <span class="material-symbols-outlined text-gray-300 group-hover:text-emerald-600 transition-colors">
+                    chevron_right
+                </span>
+            </a>
+            {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="px-6 py-12 text-center">
+            <span class="material-symbols-outlined text-4xl text-gray-300">search_off</span>
+            <p class="text-gray-400 mt-2 font-medium">No animals were added this year.</p>
+        </div>
+        {% endif %}
+
+    </div>
+
+    <!-- Back Link -->
+    <a href="{% url 'animals:animal-archive-index' %}"
+       class="flex items-center gap-2 text-emerald-700 font-bold hover:underline">
+        <span class="material-symbols-outlined text-sm">arrow_back</span>
+        Back to Archive
+    </a>
+
+</div>
 
 {% endblock %}
